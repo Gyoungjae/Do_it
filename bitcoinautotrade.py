@@ -2,8 +2,8 @@ import time
 import pyupbit
 import datetime
 
-access = "RN9rLasTSxUrPLVfxaR1QCgm7vExSa272T2M8oWy"
-secret = "7EWKJlIfBrY6wUBc5gfnRdC6d5NebLrT3xDwNnyw"
+access = "dP0bqp0hOQd62Ka02eilzQKxWrxrEz1YeyIf0FeJ"
+secret = "Ut5nk2SMA8xkxGGHPW7TZ5hTgm6MkzAfN0IjjC5L"
 
 #RIPPLE COIN
 
@@ -43,21 +43,21 @@ print("autotrade start")
 while True:
     try:
         now = datetime.datetime.now()
-        start_time = get_start_time("KRW-XRP") #start 9:00
+        start_time = get_start_time("KRW-BTC") #start 9:00
         end_time = start_time + datetime.timedelta(days=1)
 
 
         if start_time < now < end_time - datetime.timedelta(seconds=10):
-            target_price = get_target_price("KRW-XRP", 0.1)
-            current_price = get_current_price("KRW-XRP")
+            target_price = get_target_price("KRW-BTC", 0.1)
+            current_price = get_current_price("KRW-BTC")
             if target_price < current_price:
                 krw = get_balance("KRW")
                 if krw > 5000:
-                    upbit.buy_market_order("KRW-XRP", krw*0.9995)
+                    upbit.buy_market_order("KRW-BTC", krw*0.9995)
         else:
             btc = get_balance("BTC")
             if btc > 0.00008:
-                upbit.sell_market_order("KRW-XRP", btc*0.9995)
+                upbit.sell_market_order("KRW-BTC", btc*0.9995)
         time.sleep(1)
     except Exception as e:
         print(e)
