@@ -2,8 +2,8 @@ import time
 import pyupbit
 import datetime
 
-access = "275L5xX0K1IxwlyMxphcZTLM3BpA2DE3S7KBHH7w"
-secret = "JaxyN3DLMIIqR1JiHqT3OKxnxpo2R0E0yoMfkHtPs"
+access = "RN9rLasTSxUrPLVfxaR1QCgm7vExSa272T2M8oWy"
+secret = "7EWKJlIfBrY6wUBc5gfnRdC6d5NebLrT3xDwNnyw"
 
 #RIPPLE COIN
 
