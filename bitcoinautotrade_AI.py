@@ -16,7 +16,7 @@ secret = "Ut5nk2SMA8xkxGGHPW7TZ5hTgm6MkzAfN0IjjC5L"
 def get_target_price(ticker, k):
     """변동성 돌파 전략으로 매수 목표가 조회"""
     df = pyupbit.get_ohlcv(ticker, interval="day", count=2)
-    target_price = df.iloc[0]['close'] + (df.iloc[0]['high'] - df.iloc[0]['low']) * k
+    target_price = df.iloc[0]['close'] - (df.iloc[0]['high'] - df.iloc[0]['low']) * k
     return target_price
 
 def get_start_time(ticker):
@@ -48,7 +48,7 @@ def predicted_price_AI():
     current_price=current_price.transpose()
     coin_predict_price = []
     for coin in tqdm(coin_list100):
-        df = pyupbit.get_ohlcv(coin, interval="minute60", count=72)
+        df = pyupbit.get_ohlcv(coin, interval="minute60", count=200)
         df = df.reset_index()
         df['ds'] = df['index']
         df['y'] = df['close']
@@ -98,7 +98,7 @@ while True:
         if start_time < now < end_time - datetime.timedelta(minutes=10):
             target_price = get_target_price(predicted_AI[0], 0.1)
             current_price = get_current_price(predicted_AI[0])
-            if target_price < current_price and current_price < predicted_AI[2]:
+            if target_price >= current_price and current_price < predicted_AI[2]:
                 krw = get_balance("KRW")
                 if krw > 5000:
                     upbit.buy_market_order(predicted_AI[0], krw*0.9995)
@@ -114,3 +114,4 @@ while True:
     except Exception as e:
         print(e)
         time.sleep(1)
+        
