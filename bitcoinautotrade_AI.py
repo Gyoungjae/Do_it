@@ -163,7 +163,7 @@ while True:
             current_price = float(current_price)
             btc = get_balance(predicted_AI[4])
             print("구입한 코인 : {}, 현재 가격 : {}, 목표 매수가격 : {}, AI예상 가격 : {}".format(predicted_AI[0],current_price,target_price,predict_change_AI_value[2]))
-            if target_price >= current_price and current_price < int(predict_change_AI_value[2])*0.99 :
+            if target_price >= current_price and current_price < int(predict_change_AI_value[2]) * 0.99:
                 krw = get_balance("KRW")
                 if krw > 5000:
                     upbit.buy_market_order(predicted_AI[0], krw*0.9995)
