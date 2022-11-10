@@ -52,7 +52,7 @@ def predicted_price_AI():
     current_price=current_price.transpose()
     coin_predict_price = []
     for coin in tqdm(coin_list100):
-        df = pyupbit.get_ohlcv(coin, interval="minute60", count=72)
+        df = pyupbit.get_ohlcv(coin, interval="minute10", count=400)
         df = df.reset_index()
         df['ds'] = df['index']
         df['y'] = df['close']
@@ -161,23 +161,43 @@ while True:
             current_price = get_current_price(predicted_AI[0])
             target_price = float(target_price)
             current_price = float(current_price)
+            krw = get_balance("KRW")
             btc = get_balance(predicted_AI[4])
             print("구입한 코인 : {}, 현재 가격 : {}, 목표 매수가격 : {}, AI예상 가격 : {}".format(predicted_AI[0],current_price,target_price,predict_change_AI_value[2]))
-            if target_price >= current_price and current_price < int(predict_change_AI_value[2]) * 0.99:
-                krw = get_balance("KRW")
-                if krw > 5000:
-                    upbit.buy_market_order(predicted_AI[0], krw*0.9995)
-                    print("구입한 코인 : {}".format(predicted_AI[0]))
-            if btc > 0.00008 and (current_price >= float(predict_change_AI_value[2])):
+            if krw < 5000 and current_price >= int(target_price*1.005) and current_price >= float(predict_change_AI_value[2]):
+                btc = get_balance(predicted_AI[4])
                 upbit.sell_market_order(predicted_AI[0], btc*0.9995)
                 print("수익율 충족으로 매도한 코인 : {}".format(predicted_AI[0]))
+                predicted_price_AI()
+                predicted_AI = predicted_price_AI()
+                predicted_price_AI_change()
+                predicted_change_AI_value = predicted_price_AI_change()
+            if krw< 5000 and current_price >= float(target_price*1.03):
+                btc = get_balance(predicted_AI[4])
+                upbit.sell_market_order(predicted_AI[0], btc*0.9995)
+                print("수익율 충족으로 매도한 코인 : {}".format(predicted_AI[0]))
+                predicted_price_AI()
+                predicted_AI = predicted_price_AI()
+                predicted_price_AI_change()
+                predicted_change_AI_value = predicted_price_AI_change()
+            if krw < 5000 and current_price <= int(target_price*0.95):
+                btc = get_balance(predicted_AI[4])
+                upbit.sell_market_order(predicted_AI[0], btc*0.9995)
+                print("하루 최대 손해 5%로 매도한 코인 : {}".format(predicted_AI[0]))
+                predicted_price_AI()
+                predicted_AI = predicted_price_AI()
+                predicted_price_AI_change()
+                predicted_change_AI_value = predicted_price_AI_change()
         
         else:
             btc = get_balance(predicted_AI[4])
             if btc > 0.00008 :
                 upbit.sell_market_order(predicted_AI[0], btc*0.9995)
                 print("오전 8시 50분 매도한 코인 : {}".format(predicted_AI[0]))
-                predicted_price_AI()
+            predicted_price_AI()
+            predicted_AI = predicted_price_AI()
+            predicted_price_AI_change()
+            predicted_change_AI_value = predicted_price_AI_change()
         time.sleep(1)
     except Exception as e:
         print(e)
